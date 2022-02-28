@@ -1,9 +1,16 @@
-import logo from './logo.svg';
+import { useState } from "react";
 import './App.css';
 
 function App() {
+
+  const [setQuery] = useState("");
+
   return (
-    <h1>Search Engine</h1>
+    <div>
+      <h1>Search Engine</h1>
+      <label>Search</label>
+      <input type = "text" onChange = {e => setQuery(e.target.value)} />
+    </div>
   );
 }
 
