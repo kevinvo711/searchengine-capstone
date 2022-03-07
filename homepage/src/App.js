@@ -1,17 +1,37 @@
 import { useState } from "react";
-import './App.css';
+import TextField from "@mui/material/TextField";
+import ResultList from "./Components/ResultList"
+import "./App.css";
 
 function App() {
 
-  const [setQuery] = useState("");
-
+  const [query, setQuery] = useState("");
+  const [showQuery, setShowQuery] = useState(false)
+  const onSubmit = () => setShowQuery(true)
+  //make responsive to enter key
+  const handleKeypress = e => {
+    if (e.key ==='Enter') {
+      setShowQuery(true)  ;
+          }}  
   return (
-    <div>
+    <div classname="main">
       <h1>Search Engine</h1>
-      <label>Search</label>
-      <input type = "text" onChange = {e => setQuery(e.target.value)} />
+      <div className="search">
+        <TextField
+          onChange={e => setQuery(e.target.value.toLowerCase(), setShowQuery(false))}
+          label="Search"
+          onKeyPress={handleKeypress}
+        />
+        <button onClick={onSubmit}>Search</button>
+      </div>
+      <div>
+      
+      { showQuery ? <ResultList input={query} /> : null }
+      {/* <ResultList input={query} /> */}
+      </div>
     </div>
   );
 }
+
 
 export default App;
