@@ -4,12 +4,12 @@ import "./App.css";
 
 function App() {
   const [name, setName] = useState("");
-  const [users, setUsers] = useState([]);
+  const [project_data, setUsers] = useState([]);
 
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      const response = await fetch(`http://localhost:5000/users/?name=${name}`);
+      const response = await fetch(`http://localhost:5000/project_data/?name=${name}`);
 
       const parseResponse = await response.json();
 
@@ -21,12 +21,12 @@ function App() {
   return (
     <Fragment>
       <div className="container text-center">
-        <h1 className="my-5">Names</h1>
+        <h1 className="my-5">Links</h1>
         <form className="d-flex" onSubmit={onSubmitForm}>
           <input
             type="text"
             name="name"
-            placeholder="Enter user ..."
+            placeholder="Search ..."
             className="form-control"
             value={name}
             onChange={e => setName(e.target.value)}
@@ -36,23 +36,21 @@ function App() {
         <table className="table my-5">
           <thead>
             <tr>
-              <th>First Name</th>
-              <th>Last Name</th>
+              <th>Title</th>
               <th>URL</th>
             </tr>
           </thead>
           <tbody>
-            {users.map(user => (
-              <tr key={user.user_id}>
-                <td>{user.first_name}</td>
-                <td>{user.last_name}</td>
-                <td>{user.url}</td>
+            {project_data.map(project_data => (
+              <tr key={project_data.id}>
+                <td>{project_data.title}</td>
+                <td>{project_data.url}</td>
                 
               </tr>
             ))}
           </tbody>
         </table>
-        {users.length === 0 && <p>No Results Found</p>}
+        {project_data.length === 0 && <p>No Results Found</p>}
       </div>
     </Fragment>
   );

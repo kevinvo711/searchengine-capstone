@@ -5,16 +5,16 @@ const pool = require("./db");
 
 
 app.use(cors());
-app.get("/users", async (req, res) => {
+app.get("/project_data", async (req, res) => {
   try {
     const { name } = req.query;
 
-    const users = await pool.query(
-      "SELECT * FROM users WHERE first_name || ' ' || last_name ILIKE $1",
+    const project_data = await pool.query(
+      "SELECT * FROM project_data WHERE title ILIKE $1",
       [`%${name}%`]
     );
 
-    res.json(users.rows);
+    res.json(project_data.rows);
   } catch (err) {
     console.error(err.message);
   }
