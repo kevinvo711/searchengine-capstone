@@ -50,19 +50,15 @@ def main():
 
     """Have dictionary of stuffs, now to put it into Postgresql"""
 
-    print("hello")
-    myDf = pd.DataFrame(data=matrixObj.toarray(), columns=tokens)
+    myDf = pd.DataFrame(data=matrixObj.toarray(), columns=tokens) #just for formatting and to look inside
 
-
-    print(len(myDictionaryTuple))
     print(myDictionaryTuple)
-    print(matrixObj)
     print(myDf.head(30))
     transposed = myDf.transpose()  # 2
     print(transposed.head(30))  # 1
-    # transposed = transposed.sort_index(axis=1, ascending=False)
+    # transposed = transposed.sort_index(axis=1, ascending=False) 
     print(transposed.head(30))
-    print(len(dictionaryList))
+    print(len(dictionaryList)) #run on list of html pages, should equal to number of files in directory, in this case, 50
 
 
 
