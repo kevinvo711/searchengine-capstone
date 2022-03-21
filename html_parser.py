@@ -19,7 +19,7 @@ path = r"wikipedia/en.wikipedia.org"
 for filename in os.listdir(path):
         if filename.endswith(".html"):
             fullpath = os.path.join(path, filename)
-            soup = BeautifulSoup(open(fullpath), 'html.parser')
+            soup = BeautifulSoup(open(fullpath), 'lxml')
             title_list = list()
             url_list = list()
             text_list = list()
