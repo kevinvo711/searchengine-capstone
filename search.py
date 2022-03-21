@@ -18,13 +18,9 @@ import os
 
 def main():
     directoryName = "./data/wikipedia-trimmed"
-    testDirectory = "./testfolder"
+    # testDirectory = "./testfolder"
     vectorizer = TfidfVectorizer(stop_words="english") #vectorizer object of TfidfVectorizer class
     # X = vectorizer.fit_transform()
-
-    simple = []
-    for i in range(424):
-        simple.append(i)
 
     myDictionaryTuple = {}
     dictionaryList = []
@@ -40,18 +36,18 @@ def main():
             #     print ("(%d, %d), %s" % (i, j, v))
             # cooMatrix = scipy.sparse.coo_matrix(matrixObj)
             myDictionaryTuple = dict(zip(tokens,cooMatrix.data))
-            dictionaryList.append(myDictionaryTuple)
+            dictionaryList.append(myDictionaryTuple) 
+"""
+Have dictionary of stuffs, now to put it into Postgresql
+"""
 
-
-    myDf = pd.DataFrame(data=matrixObj.toarray(), columns=tokens)
-
- 
+    # myDf = pd.DataFrame(data=matrixObj.toarray(), columns=tokens)
     # print(len(myDictionaryTuple))
     # print(myDictionaryTuple)
     # print(matrixObj)
-    # print(myDf.head(30))
-    # transposed = myDf.transpose()
-    # print(transposed.head(30))
+    # print(myDf.head(30)) 
+    # transposed = myDf.transpose() #2 
+    # print(transposed.head(30)) #1
     # transposed = transposed.sort_index(axis = 1, ascending = False)
     # print(transposed.head(30))
     print(len(dictionaryList))
