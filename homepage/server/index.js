@@ -10,9 +10,10 @@ app.get("/results", async (req, res) => {
     const { text } = req.query;
 
     const results = await pool.query(
-      "SELECT * FROM results WHERE title ILIKE $1",
-      [`%${text}%`]
+      "SELECT id, title, url FROM results WHERE text -> 'TF-IDF' -> $1 is not null ORDER BY text -> 'TF-IDF' ->> $1 DESC;",
+      [`${text}`]
     );
+
 
     res.json(results.rows);
   } catch (err) {
