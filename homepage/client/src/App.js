@@ -1,5 +1,4 @@
-import React, { Fragment, useState } from "react";
-//import { Linking } from 'react-native';
+import React, { Fragment, useState, Component } from "react";
 import "./App.css";
 
 function App() {
@@ -9,8 +8,10 @@ function App() {
   const onSubmitForm = async e => {
     e.preventDefault();
     try {
-      if (query != ""){
+      if (query !== ""){
       const response = await fetch(`http://localhost:5000/results/?text=${query}`);
+      // const response = await fetch(`http://localhost:5000/test/?text=${query}`);
+
 
       const parseResponse = await response.json();
 
@@ -19,11 +20,13 @@ function App() {
       console.error(err.message);
     }
   };
+  
   return (
     <Fragment>
       <div className="container text-center">
         <h1 className="my-5">Search Engine</h1>
-        <form className="d-flex" onSubmit={onSubmitForm}>
+        <form className="d-flex" onSubmit={onSubmitForm} >
+        {/* method="post" action="/test" for after demo*/ }
           <input
             type="text"
             name="text"

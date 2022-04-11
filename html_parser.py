@@ -4,6 +4,16 @@ import pandas as pd
 from bs4 import BeautifulSoup
 import psycopg2
 import os
+import numpy as np
+import re
+import operator
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk import pos_tag
+from nltk.corpus import stopwords
+from nltk.stem import WordNetLemmatizer
+from collections import defaultdict
+from nltk.corpus import wordnet as wn
 
 HOST = "localhost"
 USERNAME = "postgres"
@@ -11,7 +21,8 @@ PASSWORD = "password"
 DATABASE = "starter-server"
 PORT = "5432"
 
-db = psycopg2.connect(host=HOST, user=USERNAME, password=PASSWORD, database=DATABASE)
+db = psycopg2.connect(host=HOST, user=USERNAME,
+                      password=PASSWORD, database=DATABASE)
 cursor = db.cursor()
 
 
@@ -33,16 +44,15 @@ for filename in os.listdir(path):
                 # print(url_list)
             inputtext = [soup.get_text()]
 
-            
-
-            tfIdfVectorizer=TfidfVectorizer(use_idf=True, stop_words=text.ENGLISH_STOP_WORDS)
+            tfIdfVectorizer = TfidfVectorizer(
+                use_idf=True, stop_words=text.ENGLISH_STOP_WORDS)
             tfIdf = tfIdfVectorizer.fit_transform(inputtext)
-            df = pd.DataFrame(tfIdf[0].T.todense(), index=tfIdfVectorizer.get_feature_names_out(), columns=["TF-IDF"])
+            df = pd.DataFrame(tfIdf[0].T.todense(
+            ), index=tfIdfVectorizer.get_feature_names_out(), columns=["TF-IDF"])
             df = df.sort_values('TF-IDF', ascending=False)
-            dftojson = df.to_json(orient ="columns")
+            dftojson = df.to_json(orient="columns")
             text_list.append(dftojson)
             # print(text_list)
-
             # print (dftojson)
 
             for index in range(0, len(title_list)):
@@ -54,4 +64,4 @@ for filename in os.listdir(path):
                 postgres_insert_query = """ INSERT INTO RESULTS (title, url, text) VALUES (%s,%s,%s)"""
                 record_to_insert = (title,url,tfidf)
                 cursor.execute(postgres_insert_query, record_to_insert)
-            db.commit()
+            # db.commit()
