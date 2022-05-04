@@ -19,3 +19,5 @@ changeOrigin: true }
 );
 
 }
+
+//remember to use export FLASK_RUN_PORT=8000 before typing flask run

@@ -42,26 +42,28 @@ for filename in os.listdir(path):
                 url_list.append(url.get('href'))
                 # print(url.get('href'))
                 # print(url_list)
-            inputtext = [soup.get_text()]
+                inputtext=soup.find("body").text.replace("\t", "").replace("\r", "").replace("\n", "").replace("^", "")
+            # print(inputtext)
 
-            tfIdfVectorizer = TfidfVectorizer(
-                use_idf=True, stop_words=text.ENGLISH_STOP_WORDS)
-            tfIdf = tfIdfVectorizer.fit_transform(inputtext)
-            df = pd.DataFrame(tfIdf[0].T.todense(
-            ), index=tfIdfVectorizer.get_feature_names_out(), columns=["TF-IDF"])
-            df = df.sort_values('TF-IDF', ascending=False)
-            dftojson = df.to_json(orient="columns")
-            text_list.append(dftojson)
+            # tfIdfVectorizer = TfidfVectorizer(
+            #     use_idf=True, stop_words=text.ENGLISH_STOP_WORDS)
+            # tfIdf = tfIdfVectorizer.fit_transform(inputtext)
+            # df = pd.DataFrame(tfIdf[0].T.todense(
+            # ), index=tfIdfVectorizer.get_feature_names_out(), columns=["TF-IDF"])
+            # df = df.sort_values('TF-IDF', ascending=False)
+            # dftojson = df.to_json(orient="columns")
+            text_list.append(inputtext)
             # print(text_list)
             # print (dftojson)
 
             for index in range(0, len(title_list)):
                 title = title_list[index]
                 url = url_list[index]
-                tfidf = text_list[index]
+                textdata = text_list[index]
                 # print(text)
-
                 postgres_insert_query = """ INSERT INTO RESULTS (title, url, text) VALUES (%s,%s,%s)"""
-                record_to_insert = (title,url,tfidf)
+                record_to_insert = (title,url,textdata)
                 cursor.execute(postgres_insert_query, record_to_insert)
-            # db.commit()
+            db.commit()
+            # uncomment to actually write to database server.
+

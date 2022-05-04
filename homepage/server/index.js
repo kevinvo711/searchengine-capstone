@@ -9,9 +9,12 @@ app.get("/results", async (req, res) => {
   try {
     const { text } = req.query;
     const results = await pool.query(
-      "SELECT id, title, url FROM results WHERE text -> 'TF-IDF' -> $1 is not null ORDER BY text -> 'TF-IDF' ->> $1 DESC;",
-      [`${text}`]
+      "SELECT id, title, url FROM results"
     );
+    // const results = await pool.query(
+    //   "SELECT id, title, url FROM results WHERE text -> 'TF-IDF' -> $1 is not null ORDER BY text -> 'TF-IDF' ->> $1 DESC;",
+    //   [`${text}`]
+    // );
     res.json(results.rows);
   } catch (err) {
     console.error(err.message);
@@ -19,7 +22,7 @@ app.get("/results", async (req, res) => {
 });
 
 app.post("/test", async (req, res) => {
-  res.send('POST request to the homepage')
+  res.send([req.query]);
 });
 
 app.get("/test", async (req, res) => {

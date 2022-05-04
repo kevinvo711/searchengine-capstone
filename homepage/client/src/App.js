@@ -25,8 +25,8 @@ function App() {
     <Fragment>
       <div className="container text-center">
         <h1 className="my-5">Search Engine</h1>
-        <form className="d-flex" onSubmit={onSubmitForm} >
-        {/* method="post" action="/test" for after demo*/ }
+        <form className="d-flex" method="post" action="/test">
+        {/* onSubmit={onSubmitForm}  */}
           <input
             type="text"
             name="text"
