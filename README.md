@@ -1,5 +1,6 @@
 Search engine - capstone project.
 
+A limited search engine that works on a local dataset (Wikipedia articles)
 
 **Important to Have Installed**
 1) Postgres
