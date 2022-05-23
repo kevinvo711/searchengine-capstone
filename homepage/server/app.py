@@ -7,6 +7,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import sys
 import csv
 import pickle
+import time
 
 csv.field_size_limit(sys.maxsize)
 
@@ -18,9 +19,9 @@ tfIdf = tfIdfVectorizer.fit_transform(df['text'])
 @app.route('/test', methods=['POST', 'GET'])
 def test():
     if request.method == "POST":
-        searchquery = request.form['text']   # vectorize search term
+        searchquery = request.form['text']   
         if (searchquery != ""):
-            q_vec = tfIdfVectorizer.transform([searchquery])
+            q_vec = tfIdfVectorizer.transform([searchquery]) # vectorize search term
             results = cosine_similarity(tfIdf,q_vec).reshape((-1,))
             results_list = []
             newresults = results.argsort()[-51:][::-1]
@@ -31,6 +32,7 @@ def test():
                                     'description': str(df.iloc[i,3])})
                 with open("../client/src/results.json", "w", encoding ='utf8') as write_file:
                     json.dump(results_list, write_file)
+            time.sleep(.2)    
             return redirect('/')
         return redirect('/')
 
