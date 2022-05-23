@@ -13,6 +13,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 import os
 import termlist
+from index import Index
 
 
 """

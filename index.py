@@ -2,17 +2,19 @@ import pandas as pd
 import numpy as np
 import os
 import termlist
-"""
-def process_files(filenames):
+
+"Implementing the index for the search engine"
+
+def process_files(directoryName): #reading from the wikipedia directory
 	file_to_terms = {}
-	for file in filenames:
+	for file in directoryName:
 		pattern = re.compile('[\W_]+')
-		file_to_terms[file] = open(file, 'r').read().lower();
+		file_to_terms[file] = open(file, 'r').read().lower(); #open file to read them
 		file_to_terms[file] = pattern.sub(' ',file_to_terms[file])
 		re.sub(r'[\W_]+','', file_to_terms[file])
 		file_to_terms[file] = file_to_terms[file].split()
 	return file_to_terms
-"""
+
 def index_one_file(termlist):
 	fileIndex = {}
 	for index, word in enumerate(termlist):
@@ -40,4 +42,3 @@ def fullIndex(regdex):
 			else:
 				total_index[word] = {directoryName: regdex[directoryName][word]}
 	return total_index
-"Implementing the index for the search engine"
