@@ -36,3 +36,44 @@
     transform: rotate(360deg);
   }
 }
+
+h1.my-5{
+  font-weight: 1000;
+  color: rgb(1, 186, 239);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  
+}
+body {
+  color: black;
+  background-color: rgb(229, 229, 234);
+  font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+table {
+  border-collapse: collapse;
+  
+  text-align: left;
+}
+
+tr {
+  text-align: left;
+  width: 90%;
+}
+
+th {
+  text-align: left;
+}
+
+tbody {
+  text-align: left;
+}
+p.title{
+  color: rgb(115, 68, 202);
+  font-weight: bold;
+  font-family: Georgia, 'Times New Roman', Times, serif;
+}
+
+button.btn{
+  color: white;
+  background-color: rgb(11, 79, 108);
+}

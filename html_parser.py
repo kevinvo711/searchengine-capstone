@@ -7,13 +7,13 @@ import os
 import numpy as np
 import re
 import operator
-import nltk
-from nltk.tokenize import word_tokenize
-from nltk import pos_tag
-from nltk.corpus import stopwords
-from nltk.stem import WordNetLemmatizer
-from collections import defaultdict
-from nltk.corpus import wordnet as wn
+import sys
+import csv
+import pickle
+
+from sqlalchemy import desc
+
+csv.field_size_limit(sys.maxsize)
 
 HOST = "localhost"
 USERNAME = "postgres"
@@ -34,36 +34,46 @@ for filename in os.listdir(path):
             title_list = list()
             url_list = list()
             text_list = list()
+            desc_list = list()
 
             title_list.append(soup.title.string)
-            # print(title_list[0])
-
+            
             for url in soup.find_all(rel='canonical'):
                 url_list.append(url.get('href'))
-                # print(url.get('href'))
-                # print(url_list)
-                inputtext=soup.find("body").text.replace("\t", "").replace("\r", "").replace("\n", "").replace("^", "")
-            # print(inputtext)
 
-            # tfIdfVectorizer = TfidfVectorizer(
-            #     use_idf=True, stop_words=text.ENGLISH_STOP_WORDS)
-            # tfIdf = tfIdfVectorizer.fit_transform(inputtext)
-            # df = pd.DataFrame(tfIdf[0].T.todense(
-            # ), index=tfIdfVectorizer.get_feature_names_out(), columns=["TF-IDF"])
-            # df = df.sort_values('TF-IDF', ascending=False)
-            # dftojson = df.to_json(orient="columns")
-            text_list.append(inputtext)
-            # print(text_list)
-            # print (dftojson)
+                inputtext=soup.find("body").text.replace("\t", " ").replace("\r", " ").replace("\n", "").replace("^", " ")
+                text_list.append(inputtext)
+
+                content = soup.select('p')
+                sentences = str()
+                periods = 0
+                description_amount = 3 - periods
+                for i in content:
+                    matches = re.findall(r'(.+?[.!])(?: |$)', i.getText())
+                    total_sentences = len(matches)
+                    for i in range(min(total_sentences, description_amount)):
+                        periods = sentences.count('.')
+                        sentences = sentences.replace("^", " ") + (matches[i]) + " "
+                        periods = sentences.count('.')
+                    if periods >= 3:
+                        break
+                desc_list.append(sentences.replace("^", " "))
 
             for index in range(0, len(title_list)):
                 title = title_list[index]
                 url = url_list[index]
                 textdata = text_list[index]
-                # print(text)
-                postgres_insert_query = """ INSERT INTO RESULTS (title, url, text) VALUES (%s,%s,%s)"""
-                record_to_insert = (title,url,textdata)
+                descdata = desc_list[index]
+                postgres_insert_query = """INSERT INTO RESULTS (title, url, description, text) VALUES (%s,%s,%s,%s);"""
+                record_to_insert = (title,url,descdata, textdata)
                 cursor.execute(postgres_insert_query, record_to_insert)
-            db.commit()
-            # uncomment to actually write to database server.
+            db.commit() # uncomment to actually write to database server.
 
+copy_query = "COPY results TO 'data.csv'  WITH DELIMITER '^' CSV HEADER;"
+fout = open('data.csv', 'w')
+cursor.copy_to(fout, 'results', sep="^")
+col_names = ["id", "title", "url", "description", "text"]
+df = pd.read_csv('data.csv', encoding='utf-8', sep='^', names=col_names, error_bad_lines=False, engine='python')
+df.head()
+df.to_pickle('data.pkl') 
+#save to pickle for faster loading and use in app.py

@@ -1,32 +1,16 @@
 import React, { Fragment, useState, Component } from "react";
+import List from "./List"
 import "./App.css";
+
 
 function App() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState([]);
 
-  const onSubmitForm = async e => {
-    e.preventDefault();
-    try {
-      if (query !== ""){
-      const response = await fetch(`http://localhost:5000/results/?text=${query}`);
-      // const response = await fetch(`http://localhost:5000/test/?text=${query}`);
-
-
-      const parseResponse = await response.json();
-
-      setResults(parseResponse);}
-    } catch (err) {
-      console.error(err.message);
-    }
-  };
-  
   return (
     <Fragment>
       <div className="container text-center">
-        <h1 className="my-5">Search Engine</h1>
-        <form className="d-flex" method="post" action="/test">
-        {/* onSubmit={onSubmitForm}  */}
+        <h1 className="my-5">Search</h1>
+        <form className="d-flex" method="post" action="/test" >
           <input
             type="text"
             name="text"
@@ -37,23 +21,10 @@ function App() {
           />
           <button className="btn btn-success">Submit</button>
         </form>
+
         <table className="table my-5">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>URL</th>
-            </tr>
-          </thead>
-          <tbody>
-            {results.map(result => (
-              <tr key={result.id}>
-                <td>{result.title}</td>
-                <td><a target ="_blank" href={result.url}>{result.url}</a></td>
-              </tr>
-            ))}
-          </tbody>
+          <List />
         </table>
-        {results.length === 0 && <p>No Results Found</p>}
       </div>
     </Fragment>
   );

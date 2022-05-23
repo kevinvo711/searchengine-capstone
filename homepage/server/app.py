@@ -19,19 +19,20 @@ tfIdf = tfIdfVectorizer.fit_transform(df['text'])
 def test():
     if request.method == "POST":
         searchquery = request.form['text']   # vectorize search term
-        print(searchquery)
-        q_vec = tfIdfVectorizer.transform([searchquery])
-        results = cosine_similarity(tfIdf,q_vec).reshape((-1,))
-        results_list = []
-        newresults = results.argsort()[-51:][::-1]
-        for i in newresults:
-            results_list.append({'id': str(df.iloc[i,0]),
-                                'title': str(df.iloc[i,1]),
-                                'url': str(df.iloc[i,2])})
-            with open("../client/src/results.json", "w", encoding ='utf8') as write_file:
-                json.dump(results_list, write_file)
+        if (searchquery != ""):
+            q_vec = tfIdfVectorizer.transform([searchquery])
+            results = cosine_similarity(tfIdf,q_vec).reshape((-1,))
+            results_list = []
+            newresults = results.argsort()[-51:][::-1]
+            for i in newresults:
+                results_list.append({'id': str(df.iloc[i,0]),
+                                    'title': str(df.iloc[i,1]),
+                                    'url': str(df.iloc[i,2]),
+                                    'description': str(df.iloc[i,3])})
+                with open("../client/src/results.json", "w", encoding ='utf8') as write_file:
+                    json.dump(results_list, write_file)
+            return redirect('/')
         return redirect('/')
-    return redirect('/')
 
 if __name__ == "__app__":
     app.run(port=8000, debug=True)
