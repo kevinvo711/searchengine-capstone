@@ -60,36 +60,6 @@ def main():
     print(transposed.head(30))
     print(len(dictionaryList)) #run on list of html pages, should equal to number of files in directory, in this case, 50
 
-""" Indexing the search """
-#*** Not completed ***
-def index_one_file(termlist):
-	fileIndex = {}
-	for index, word in enumerate(termlist):
-		if word in fileIndex.keys():
-			fileIndex[word].append(index)
-		else:
-			fileIndex[word] = [index]
-	return fileIndex
-
-    def make_indices(termlists):
-	total = {}
-	for directoryName in termlists.keys():
-		total[directoryName] = index_one_file(termlists[directoryName])
-	return total
-
-def fullIndex(regdex):
-	total_index = {}
-	for directoryName in regdex.keys():
-		for word in regdex[directoryName].keys():
-			if word in total_index.keys():
-				if directoryName in total_index[word].keys():
-					total_index[word][directoryName].extend(regdex[directoryName][word][:])
-				else:
-					total_index[word][directoryName] = regdex[directoryName][word]
-			else:
-				total_index[word] = {directoryName: regdex[directoryName][word]}
-	return total_index
-#*** Not completed ***
 """
 Uses BeautifulSoup package to parse HTML, using 'lxml' parser
 @param fileName
